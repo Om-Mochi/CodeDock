@@ -1,0 +1,1 @@
+{'bg_clr': 'none', 'brdr_clr': 'none', 'brdr_think': 0, 'brdr_radius': 0, 'w': 400, 'h': 32}

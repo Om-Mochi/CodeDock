@@ -1,0 +1,1 @@
+{'bg_clr': '#1D2021', 'brdr_clr': '#3C3836', 'brdr_think': 0.0, 'brdr_radius': 6, 'w': 40, 'h': 30, 'spacing': 11}

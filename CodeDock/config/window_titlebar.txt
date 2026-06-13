@@ -1,0 +1,1 @@
+{'window_brdr_color': 'none', 'window_brdr_think': 1, 'ttlbr_bg_clr': '#272727', 'ttlbr_text_clr': '#fffdc4', 'close_btn_clr': 'none', 'maximize_btn_clr': 'none', 'btns_radius': 0, 'maximize_btn_hover': 'green', 'close_btn_hover': 'red', 'ttlbr_size': 31, 'ttlbr_btns_size': 23, 'ttlbr_title_font': 17, 'ttlbr_hover': '#323232'}

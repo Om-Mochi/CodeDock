@@ -1,0 +1,1 @@
+{'bg_clr': '#1E1E1E', 'brdr_clr': '#2D2D30', 'btn_clr': '#1E1E1E', 'font_clr': '#ffffff', 'font_size': 10, 'btn_brdr_clr': None, 'btn_hover': None, 'scroll_bar_clr': '#141414', 'scroll_handel_clr': '#2D2D30'}

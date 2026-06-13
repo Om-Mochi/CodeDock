@@ -1,0 +1,1 @@
+{'index': 0, 'columns': 5, 'img_spacing': 20, 'bg_clr': [76, 76, 76, 200], 'margin': 40, 'brdr_radius': 20, 'image_labes': {'h': 190, 'w': 240, 'radius': 8, 'font_size': 15, 'selected_brdr_thinkess': 5, 'font_clr': '#fff1db', 'brdr_clr': '#313634', 'selected_clr': '#bdbdbd'}}

@@ -1,0 +1,1 @@
+{'bg_clr': '#1E1E1E', 'brdr_clr': '#569CD6', 'selecte_item_clr': '#0A0A0A', 'brdr_think': 1.0, 'text_clr': '#FFFFFF', 'font': None, 'font_size': None, 'selecte_text_clr': '#DCDCAA'}

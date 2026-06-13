@@ -1,0 +1,1 @@
+{'brdr_think': 0.0, 'brdr_clr': '#3C3836', 'bg_clr': '#282828', 'radius': 5.5, 'hover': None, 'wh': 24, 'icon_size': 24}

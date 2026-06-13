@@ -1,0 +1,1 @@
+{'w_type': 'syntax_theme', 'language': '.cpp', 'keyword': '#FFD866', 'type': '#78DCE8', 'class': '#AB9DF2', 'function': '#FC9867', 'def_func': '#A9DC76', 'string': '#A9DC76', 'comment': '#727072', 'number': '#AB9DF2', 'constants': '#FF6188', 'brackets': '#FCFCFA', 'preprocessor': '#FFD866', 'namespace': '#78DCE8', 'method': '#FC9867', 'operator': '#FCFCFA', 'other': '#FCFCFA'}

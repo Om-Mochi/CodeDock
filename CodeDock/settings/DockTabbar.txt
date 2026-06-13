@@ -1,0 +1,1 @@
+{'bg_clr': '#383838', 'brdr_clr': 'none', 'tab_clr': '#4f2e6d', 'tab_brdr_clr': None, 'tab_hover_clr': '#767677', 'tab_selected_clr': '#141618', 'font_clr': '#52B7EC', 'tab_size': None, 'tab_brdr': None, 'font': None, 'tab_radius': None, 'tab_padding_tb': 4, 'tab_padding_rl': 6}

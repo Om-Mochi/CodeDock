@@ -1,0 +1,1 @@
+{'keyword': '#ffc1c2', 'class': '#47c8ff', 'constants': '#FFCB6B', 'function': '#63fffa', 'def_func': '#6ba3eb', 'string': '#a6c29a', 'comment': '#ababab', 'number': '#bdff59', 'brackets': '#ff4e51', 'self': '#49bda4', 'object': '#cf3e40', 'method': '#a47de8', 'operator': '#65d45f', 'method_call': '#9eb3ff', 'other': '#ffffff'}

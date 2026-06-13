@@ -1,0 +1,1 @@
+{'bg_clr': '#000000', 'brdr_clr': 'none', 'tab_clr': '#545454', 'tab_brdr_clr': ['#fff8c6', '#d88888'], 'tab_hover_clr': '#2b3644', 'tab_selected_clr': '#2d2d2d', 'selected_font_clr': '#fff5ab', 'font_clr': '#ffffff', 'tab_brdr': None, 'font': None, 'tab_radius': 0.0, 'tab_padding_tb': 3, 'tab_padding_rl': 5, 'tab_size_flag': False, 'tab_w': 60, 'tab_h': 3, 'tabbar_h': 28}

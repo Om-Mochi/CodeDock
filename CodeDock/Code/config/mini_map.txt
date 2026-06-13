@@ -1,0 +1,1 @@
+{'minimap_bg': '#1E1E1E', 'vp_rgba': [0, 0, 0, 80], 'vp_brdr_rgba': [220, 220, 170, 255], 'vp_brdr_hover_rgba': [86, 156, 214, 255], 'brdr_width': 2}
