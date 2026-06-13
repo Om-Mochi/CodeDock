@@ -1,6 +1,7 @@
 CodeDock
 
-![CodeDock](ADSDemoodedock_splash5.png)
+![CodeDock](icons/codedock_splash5.png)
+
 CodeDock is an advanced code editor and docking framework built with Python and PyQt6. The project was created to explore desktop application development, custom UI frameworks, software architecture, editor infrastructure, and Language Server Protocol (LSP) integration.
 
 «⚠️ This project is primarily a learning project and is not intended to represent production-quality architecture or code organization.»
@@ -9,21 +10,27 @@ CodeDock is an advanced code editor and docking framework built with Python and 
 
 Features
 
-Advanced Docking Features
-![ADSDemo](CodeDock/icons/ADS_Demo.gif)
+Advanced Docking System
 
-Dynamic dock placement
-Drag-and-drop docking
-Tabbed dock containers
-Nested splitter layouts
-Custom docking Systeme Editing
-highlightingax highlighting
+![ADSDemo](icons/ADS_Demo.gif)
+
+- Dynamic dock placement
+- Drag-and-drop docking
+- Tabbed dock containers
+- Nested splitter layouts
+- Custom docking architecture
+
+Code Editing
+
+- Syntax highlighting
 - Theme customization
 - Code navigation
 - Reference lookup
 - Multi-language support
 
 Language Server Protocol (LSP)
+
+![AutoComplition](icons/cd_auto_completion.gif)
 
 - Python (pylsp)
 - C/C++ (clangd)
@@ -36,6 +43,9 @@ Language Server Protocol (LSP)
 Editor Infrastructure
 
 - Custom minimap
+
+![AutoComplition](icons/cd_minimap.gif)
+
 - Breakpoints
 - Workspace management
 - Tab switcher
@@ -55,19 +65,7 @@ Technologies
 
 ---
 
-Screenshots
-
-Main Interface
-
-"Main Interface" (docs/images/main.gif)
-
-Docking System
-
-"Docking System" (docs/images/docking.gif)
-
-Editor Features
-
-"Editor Features" (docs/images/editor.gif)
+Themes
 
 ---
 
@@ -116,4 +114,4 @@ Author
 
 Om Mochi
 
-GitHub: https://github.com/Om-Mochi
+GitHub: "https://github.com/Om-Mochi" (https://github.com/Om-Mochi)
