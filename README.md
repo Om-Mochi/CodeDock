@@ -7,15 +7,16 @@ CodeDock is an advanced code editor and docking framework built with Python and 
 ---
 
 Features
-![CodeDock](icons/ADS_Demo.gif)
-![ementck Drag-and--ddDrag-and-prag-and-drop docking
-- Tabbed dock containers
-- Nested splitter layouts
-- Custom docking architecture
 
-Code Editing
+Advanced Docking Features
+![ADSDemo](icons/ADS_Demo.gif)
 
-- Syntax highlighting
+Dynamic dock placement
+Drag-and-drop docking
+Tabbed dock containers
+Nested splitter layouts
+Custom docking Systeme Editing
+highlightingax highlighting
 - Theme customization
 - Code navigation
 - Reference lookup
