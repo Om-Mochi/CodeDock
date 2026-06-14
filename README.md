@@ -1,6 +1,7 @@
+
 CodeDock
 
-![CodeDock](icons/codedock_splash5.png)
+![CodeDock](CodeDock/icons/codedock_splash5.png)
 
 CodeDock is an advanced code editor and docking framework built with Python and PyQt6. The project was created to explore desktop application development, custom UI frameworks, software architecture, editor infrastructure, and Language Server Protocol (LSP) integration.
 
@@ -12,7 +13,7 @@ Features
 
 Advanced Docking System
 
-![ADSDemo](icons/ADS_Demo.gif)
+![ADSDemo](CodeDock/icons/ADS_Demo.gif)
 
 - Dynamic dock placement
 - Drag-and-drop docking
@@ -30,7 +31,7 @@ Code Editing
 
 Language Server Protocol (LSP)
 
-![AutoComplition](icons/cd_auto_completion.gif)
+![AutoComplition](CodeDock/icons/cd_auto_completion.gif)
 
 - Python (pylsp)
 - C/C++ (clangd)
@@ -44,7 +45,7 @@ Editor Infrastructure
 
 - Custom minimap
 
-![AutoComplition](icons/cd_minimap.gif)
+![AutoComplition](CodeDock/icons/cd_minimap.gif)
 
 - Breakpoints
 - Workspace management
@@ -66,6 +67,8 @@ Technologies
 ---
 
 Themes
+
+![AutoComplition](CodeDock/icons/cd_themess.gif)
 
 ---
 
