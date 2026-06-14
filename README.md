@@ -1,5 +1,5 @@
 
-<h6>CodeDock</h6>
+<h1>CodeDock</h1>
 
 ![CodeDock](CodeDock/icons/github_demo/win_demo.png)
 
