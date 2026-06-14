@@ -9,7 +9,7 @@ CodeDock is an advanced code editor and docking framework built with Python and 
 
 ---
 
-Features
+<h2>Features</h2>
 
 Advanced Docking System
 
@@ -21,7 +21,7 @@ Advanced Docking System
 - Nested splitter layouts
 - Custom docking architecture
 
-Code Editing
+<h2>Code Editing</h2>
 
 - Syntax highlighting
 - Theme customization
@@ -29,7 +29,7 @@ Code Editing
 - Reference lookup
 - Multi-language support
 
-Language Server Protocol (LSP)
+<h2>Language Server Protocol (LSP)</h2>
 
 ![AutoComplition](CodeDock/icons/cd_auto_completion.gif)
 
@@ -41,7 +41,7 @@ Language Server Protocol (LSP)
 - Signature help
 - Auto-completion
 
-Editor Infrastructure
+<h2>Editor Infrastructure</h2>
 
 - Custom minimap
 
@@ -55,7 +55,7 @@ Editor Infrastructure
 
 ---
 
-Technologies
+<h2>Technologies</h2>
 
 - Python
 - PyQt6
@@ -66,13 +66,13 @@ Technologies
 
 ---
 
-Themes
+<h2>Themes</h2>
 
 ![AutoComplition](CodeDock/icons/cd_themess.gif)
 
 ---
 
-What I Learned
+<h2>What I Learned</h2>
 
 CodeDock became one of my largest personal projects and taught me many important lessons about software development:
 
@@ -90,7 +90,7 @@ However, those challenges became valuable learning experiences and helped me bet
 
 ---
 
-Future Plans
+<h2>Future Plans</h2>
 
 I am currently rebuilding many of the concepts from CodeDock in a new C++/Qt project.
 
