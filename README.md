@@ -45,7 +45,7 @@ Editor Infrastructure
 
 - Custom minimap
 
-![AutoComplition](CodeDock/icons/cd_minimap.gif)
+![AutoComplition](CodeDock/icons/cd_mini_map.gif)
 
 - Breakpoints
 - Workspace management
