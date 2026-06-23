@@ -1,6 +1,6 @@
 from PyQt6 import QtWidgets,QtGui
 from PyQt6.QtCore import pyqtSignal,QObject
-from CodeDock.Lang.L_py.PyTags import PyLsp
+from CodeDock.Lang.L_py.PyLsp import PyLsp
 from CodeDock.Lang.L_cpp.CppLSP import ClangdLsp
 from CodeDock.Lang.L_rs.RustLsp import RustAnalyzerLsp
 from CodeDock.Lang.L_ts.LspTypeScript import TypeScriptLsp
