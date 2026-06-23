@@ -18,7 +18,7 @@ from CodeDock.src.views.ThemeListUiDialog import ThemeListerWidget
 from CodeDock.DockingSystem import DockingSystem
 
 from CodeDock.Lang.LspHandler import Lsp_Handler
-from CodeDock.Lang.L_py.PyTags import PyLsp
+from CodeDock.Lang.L_py.PyLsp import PyLsp
 from CodeDock.Lang.L_cpp.CppLSP import ClangdLsp
 from CodeDock.src.controllers.TabSwitcher import Tab_V_Switcher,Ui_Tab_Switcher,BasicTabSwitcher
 
