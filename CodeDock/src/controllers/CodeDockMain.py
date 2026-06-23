@@ -13,7 +13,6 @@ from CodeDock.src.controllers.PathHandler import Path_Handler,Dir_Scanner
 from CodeDock.src.controllers.SettingDialogWidgets import Setting_Dialog_Widgets
 from CodeDock.src.controllers.CDLoader import CDLoader
 
-from CodeDock.src.views.CodeDockUi import Code_Dock_Ui
 from CodeDock.src.views.ThemeListUiDialog import ThemeListerWidget
 
 from CodeDock.DockingSystem import DockingSystem
@@ -21,6 +20,8 @@ from CodeDock.DockingSystem import DockingSystem
 from CodeDock.Lang.LspHandler import Lsp_Handler
 from CodeDock.Lang.L_py.PyTags import PyLsp
 from CodeDock.Lang.L_cpp.CppLSP import ClangdLsp
+from CodeDock.src.controllers.TabSwitcher import Tab_V_Switcher,Ui_Tab_Switcher,BasicTabSwitcher
+
 #from CodeDock.Lang.L_rs.RustLsp import RustLsp
 #from CodeDock.Lang.L_ts.LspTypeScript import TsLsp
 
@@ -90,9 +91,12 @@ class Code_Dock_Main(Code_Dock_Settings):
     
         self.virtual_session_handler.setStorageDir(self.Path_h.CodeDock.WORKSPACE)
         self.virtual_running_index=0
-        
 
+        self.basic_tab_switcher=BasicTabSwitcher()        
+        self.basic_tab_switcher.set_current_change=True
+        self.basic_tab_switcher.whenTabSelectedText.connect(self.onCDThemeSelected)
         self.ver=1
+
         #self.virtual_session_buffer=self.virtual_session_handler.createNewVirtualStorageBuffer()
         #self.virtual_session_buffer=self.virtual_session_handler.getBuffer()
         #self.Code.lsp_server=self.pylsp
@@ -144,7 +148,7 @@ class Code_Dock_Main(Code_Dock_Settings):
         #WorkSpace_Handler.ReStore.ReStoreWorkSpace.loadAll(self)
         self.virtual_CD.tab_add_btn.click()
 
-        self.Code.add_subwindow_btn.click()
+        
 
                 
         #self.createVirtualSpace()
@@ -203,19 +207,20 @@ class Code_Dock_Main(Code_Dock_Settings):
 
         #self.MainWindow.when_Ctrl_pressed.connect(lambda :self.Code.running_subwindow.titlebar.setSmoothDrag(False))
         #self.MainWindow.when_Ctrl_release.connect(lambda :self.Code.running_subwindow.titlebar.setSmoothDrag(True))
-        self.MainWindow.when_Ctrl_F_pressed.connect(self.showFindInputBar)
-        self.MainWindow.when_Ctrl_G_pressed.connect(self.showGoToInputBar)
+        self.MainWindow.when_Ctrl_f_pressed.connect(self.showFindInputBar)
+        self.MainWindow.when_Ctrl_g_pressed.connect(self.showGoToInputBar)
         self.MainWindow.when_Esc_pressed.connect(self.hideGoToInputBar)
-        self.MainWindow.when_Ctrl_L_pressed.connect(lambda:(self.lsp_handler.restartLsp(self.Code.codefile_path)))
+        self.MainWindow.when_Ctrl_l_pressed.connect(lambda:(self.lsp_handler.restartLsp(self.Code.codefile_path)))
 
-        self.MainWindow.when_Ctrl_W_pressed.connect(lambda:self.Code.subWinWebBrowser())
-        self.MainWindow.when_Ctrl_N_pressed.connect(lambda:self.Code.add_subwindow_btn.click())
+        self.MainWindow.when_Ctrl_w_pressed.connect(lambda:self.Code.subWinWebBrowser())
+        self.MainWindow.when_Ctrl_n_pressed.connect(lambda:self.Code.add_subwindow_btn.click())
+        self.MainWindow.when_Ctrl_t_pressed.connect(lambda:self.popUpTabSwitcher())
 
         self.cd_icon_as_loader=CDLoader.ThreadedFadeColorSVGLoader(34,20)
+        self.cd_icon_as_loader.setSvgAndInit(self.Path_h.CODEDOCK_SPLASH_SVG)
         self.MainWindow.titlebar.h_layout.insertWidget(0,self.cd_icon_as_loader)
         self.Code.up_arrow_btn.clicked.connect(self.testLoadThreadStart)
         self.MainWindow.titlebar.h_layout.insertWidget(4,self.Dock.frame_toolbox)
-        
 
 
 
@@ -297,7 +302,14 @@ class Code_Dock_Main(Code_Dock_Settings):
         #print(self.virtual_session_buffer)
 
     def onCompletionInserted(self,s_line,start_col,e_line,end_col,completion):
-        print(s_line,start_col,e_line,end_col,completion,"----->>>>>")
+        print("....complition....inserted....")
+        line_text = self.Code.running_textedit_editor.document().findBlockByNumber(
+            s_line
+        ).text()
+
+        print("LINE:", repr(line_text))
+
+        print("|sline : ",s_line,"|scol :",start_col,"|eline : ",e_line,"|e_col : ",end_col,"|com : ",completion)
 
         self.lsp_handler.didChange(self.Code.codefile_path,s_line,start_col,e_line,end_col,completion)
 
@@ -694,7 +706,7 @@ class Code_Dock_Main(Code_Dock_Settings):
         self.dock_session_handler=self.virtual_desk_list[index][5]
         self.main_splitter=self.virtual_desk_list[index][6]
         
-        self.settingDialogUpdateObj()
+        #self.settingDialogUpdateObj()
         self.gridLayout_centralw.addWidget(self.main_widget,0,0)
         
         self.main_widget.show()
@@ -794,7 +806,7 @@ class Code_Dock_Main(Code_Dock_Settings):
         self.Dock.Panel.whenProjectRootSetedInFileModel.connect(self.onProjectRootSetedInFileModel)
 
 
-        self.Dock.Panel.setPathUrlInFileModel("/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock")
+        self.Dock.Panel.setPathUrlInFileModel(self.Path_h.base_dir)
 
         
         self.Code.frame_toolbox.hide()
@@ -835,12 +847,12 @@ class Code_Dock_Main(Code_Dock_Settings):
         self.Code.auto_subwindow_arrange_btn.clicked.connect(self.Code.mdi_area.tileSubWindows)
         #self.MainWindow.whenResize.connect(lambda x:self.Code.mdi_area.tileSubWindows())
         self.Dock.settings_btn.clicked.connect(self.openSettingWidget)
-        self.Dock.color_dialog_open.clicked.connect(self.openThemeWidget)
+        #self.Dock.color_dialog_open.clicked.connect(self.openThemeWidget)
         # self.zoom_in_btn.clicked.connect(self.zoomInEditor)
         # self.zoom_out_btn.clicked.connect(self.code.zoomOutEditor)
 
         # call this method when enterkey clicked in editor.
-        self.Dock.Panel.on_double_click_file_tree=lambda flag,f_path:(self.Code.openUrlSubwindow(f_path))
+        self.Dock.Panel.on_double_click_file_tree=lambda flag,f_path:(self.Code.dock_zone.onPathUrlDropped(f_path))
         self.Dock.connect_map_items=lambda line_no:(lambda:print("jump symbols"))
         self.Code.onEnterKeyEditor = self.onEnterKeyInEditor
         
@@ -853,7 +865,7 @@ class Code_Dock_Main(Code_Dock_Settings):
         #self.clangd.completions_ready.connect(self.setComplitionsList)
         #self.pylsp.completions_ready.connect(self.setComplitionsList)
         self.Code.zoom_in_btn.clicked.connect(lambda:self.Setting_D.openFontDialog(self.Code.textedit_code_editor.font(),self.Code.configCodeEditor))
-        self.Dock.file_open_btn.clicked.connect(self.sendDocumentSymbolsRequest)
+        #self.Dock.file_open_btn.clicked.connect(self.sendDocumentSymbolsRequest)
         self.Code.web_browser_btn.clicked.connect(self.Code.subWinWebBrowser)
 
         self.loadToolButtonSettings()
@@ -867,23 +879,19 @@ class Code_Dock_Main(Code_Dock_Settings):
         self.loadPreviewTabSwitcher()
         #self.loadSyntaxThemes()
         #print("=========++++........",open(open(self.Path_h.Code.SELECTED_CD_THEME,"r").read(),'r').read())
-        print(open(self.Path_h.Code.SELECTED_CD_THEME,"r").read())
-        self.loadFullCDTheme(open(open(self.Path_h.Code.SELECTED_CD_THEME,"r").read(),'r').read())
+
+        try :
+            self.loadFullCDTheme(open(open(self.Path_h.Code.SELECTED_CD_THEME,"r").read(),'r').read())
+        except:
+            self.loadFullCDTheme(open(self.Path_h.Code.DEFAULT_CD_THEME,'r').read())
+            with open(self.Path_h.Code.SELECTED_CD_THEME,"w")as f:
+                f.write(self.Path_h.Code.DEFAULT_CD_THEME)
+        self.Code.add_subwindow_btn.click()
         #sub=self.Code.openUrlSubwindow("/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/tempN/test.py")
         #sub.showMaximized()
         #self.Dock.settings_btn.click()
-        self.main_splitter.setSizes([100,700])
+        self.main_splitter.setSizes([100,700])  
 
-        self.project_desk=Custom.ProjectDesktop(self.Code.mdi_area)
-        
-        self.project_desk.connect_desk_projects=self.projectOpenCall
-
-        self.project_desk.project_list=[["CodeDock","/home/omx/file_o.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock"],
-                                        ["test1","/home/omx/file_o.png","sp1"],
-                                        ["test2","/home/omx/file_o.png","sp2"],
-                                        ["test3","/home/omx/file_o.png","sp3"]]
-    
-        self.project_desk.refreshProjectDesk()
         self.hover_pop_pos=None
         
         #self.pylsp.hover_ready.connect(lambda x:print(x))
@@ -939,25 +947,37 @@ class Code_Dock_Main(Code_Dock_Settings):
     def projectOpenCall(self,path):
         self.Dock.Panel.setPathUrlInFileModel(path)
 
-    def workerRequestComplition(self,charecter):
-        cur,l,c=self.Code.running_textedit_editor.getCurrentLineOrColumnPos()
-        #print(self.Code.dummy_codefile_path," ",l,c)
-        # Start a new worker
-
-        #self.Code.autoSaveCodeFile()
-
-        print("line : ",l," col :",c)
-        with open(self.Code.codefile_path,"r")as fs:
-            text=fs.read()
-
-        #word=self.Code.running_textedit_editor.getTextInRange(l,c-1,l,c)
-        if charecter:
-            #print(charecter)
+    def workerRequestComplition(self, character):
+        cur, l, c = self.Code.running_textedit_editor.getCurrentLineOrColumnPos()
         
-            #self.pylsp.request_completions(self.Code.dummy_codefile_path,l,c) 
-            self.lsp_handler.didChange(self.Code.codefile_path,l,c,l,c,charecter)
-            self.lsp_handler.requestCompletions(self.Code.codefile_path,l,c+1)
-            
+        line_text = self.Code.running_textedit_editor.document().findBlockByNumber(
+            l
+        ).text()
+
+        print("LINE:", repr(line_text))
+
+        print("charecter :- ",character)
+        print("line : ",l,"col : ",c)
+
+        self.lsp_handler.didChange(
+            self.Code.codefile_path,
+            l, c, l, c,
+            character
+        )
+
+        # Get current word
+        word = self.Code.running_textedit_editor.textCursor().block().text()
+
+        if not word.strip():
+            return
+        QtCore.QTimer.singleShot(
+            10,
+            lambda: self.lsp_handler.requestCompletions(
+                self.Code.codefile_path,
+                l,
+                c + 1
+            )
+        )
 
         #self.clangd.did_save(self.Code.codefile_path)
         #self.tslsp.did_open_document("/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/test_ts/src/main.ts",self.Code.running_textedit_editor.toPlainText())
@@ -1002,7 +1022,7 @@ class Code_Dock_Main(Code_Dock_Settings):
         self.container_test.resize(800, 465)
 
         # Background pixmap label
-        splash_pix = QtGui.QPixmap(self.Path_h.CODEBOOK_SPLASH)
+        splash_pix = QtGui.QPixmap(self.Path_h.CODEDOCK_SPLASH)
         splash_pix = splash_pix.scaled(800, 465,
                                     QtCore.Qt.AspectRatioMode.KeepAspectRatio,
                                     QtCore.Qt.TransformationMode.SmoothTransformation)
@@ -1013,6 +1033,7 @@ class Code_Dock_Main(Code_Dock_Settings):
 
         # Loader widget OVER pixmap
         self.loader_splash_test = CDLoader.ThreadedFadeColorSVGLoader(340,220, self.container_test)
+        self.loader_splash_test.setSvgAndInit(self.Path_h.CODEDOCK_SPLASH_SVG)
         #self.loader_splash_test.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
         #self.loader_splash_test.setStyleSheet("background: transparent;")
 
@@ -1027,7 +1048,7 @@ class Code_Dock_Main(Code_Dock_Settings):
         self.loader_splash_test.start_animation()
 
         # Auto close splash after 10s and show main window
-        QtCore.QTimer.singleShot(100, lambda: (
+        QtCore.QTimer.singleShot(5000, lambda: (
             self.container_test.close(),
             self.loader_splash_test.stop_animation(),
             self.MainWindow.show()
@@ -1133,23 +1154,6 @@ class Code_Dock_Main(Code_Dock_Settings):
         else:
             self.virtual_desk_list[self.virtual_running_index][4]=None
 
-    def settingDialogUpdateObj(self):
-        if self.Code.setting_dialog_flag==True:    
-            self.Setting_D=self.virtual_desk_list[self.virtual_running_index][4]        
-
-    def openThemeWidget(self):
-        image_paths = [["/home/omx/Pictures/Screenshot_20250502_180117.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/CD_Themes/test_theme1"],
-                  ["/home/omx/Pictures/Screenshot_20250502_180251.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/CD_Themes/test_theme2"],
-                  ["/home/omx/Pictures/Screenshot_20250502_180515.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/CD_Themes/test_theme3"],
-                  ["/home/omx/Pictures/Screenshot_20250502_183258.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/CD_Themes/test_theme4"],
-                  ["/home/omx/Pictures/Screenshot_20250502_190144.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/CD_Themes/test_theme5"],
-                  ["/home/omx/Pictures/Screenshot_20250502_1901441.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/CD_Themes/test6"],
-                  ["/home/omx/Pictures/Screenshot_20250502_1901441.png","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/CD_Themes/test_theme6"],
-                  ["/home/omx/Pictures/Screenshot_20250318_184718.png",None]]
-
-        theme_widget=ThemeListerWidget(image_paths)
-        theme_widget.whenThemeSelect.connect(self.onThemeChange)    
-        self.Code.subWinWidgets(theme_widget,"Theme Changer","/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/icons/white/tools/paint_tool.png")
     
     def onThemeChange(self,file_path_list):
         dock_path=self.Path_h.pathJoin(file_path_list,"Dock")
@@ -1886,6 +1890,7 @@ class Code_Dock_Main(Code_Dock_Settings):
 
 
     def onCDThemeSelected(self,file_path,load_full=True):
+        print(file_path)
         theme_name=self.Path_h.filePathToFileName(file_path)
         
         if load_full:    
@@ -1912,6 +1917,7 @@ class Code_Dock_Main(Code_Dock_Settings):
                     self.Code.setSyntaxThemeAndSet([self.lsp_handler.current_minimap_highlighter],colors)
 
         with open(self.Path_h.Code.SELECTED_CD_THEME,'w')as f:
+            print("saved ",file_path)
             f.write(file_path)
 
     def settingCDThemes(self):
@@ -2291,13 +2297,13 @@ class Code_Dock_Main(Code_Dock_Settings):
         self.Dock.Panel.toolbar_file_tree.bg_clr=var_dict["tab_clr"]
         self.Dock.Panel.toolbar_file_tree.brdr_clr=var_dict["tab_brdr_clr"]
         self.Dock.Panel.toolbar_file_tree.applyStyle()
-        self.Dock.Panel.toolbar_file_tree.setStyleSheet(f"background-color:{var_dict["tab_clr"]}")
+        self.Dock.Panel.toolbar_file_tree.setStyleSheet(f"background-color:{var_dict['tab_clr']}")
 
 
         self.Dock.Panel.toolbar_map_tree.bg_clr=var_dict["tab_clr"]
         self.Dock.Panel.toolbar_map_tree.brdr_clr=var_dict["tab_brdr_clr"]
         self.Dock.Panel.toolbar_map_tree.applyStyle()
-        self.Dock.Panel.toolbar_map_tree.setStyleSheet(f"background-color:{var_dict["tab_clr"]}")
+        self.Dock.Panel.toolbar_map_tree.setStyleSheet(f"background-color:{var_dict['tab_clr']}")
         
         
         self.virtual_CD.tabbar.bg_clr = var_dict["bg_clr"]
@@ -2432,4 +2438,25 @@ class Code_Dock_Main(Code_Dock_Settings):
             self.Dock.Path_h.updateIcon()
             self.Code.updateIconInSubwindowAndTabbar()
             
+
+    def popUpTabSwitcher(self):
+        #self.popup = Tab_V_Switcher(self.screen_size)
+        widgets=[]
+
+
+        theme_list=Dir_Scanner.child_scan(self.Path_h.CD_THEMELIST_DIR)
+        selected_theme=self.Path_h.filePathToFileName(open(self.Path_h.Code.SELECTED_CD_THEME,"r").read())
+        
+        index=0
+        for i,theme_name in enumerate(theme_list):
+            theme=self.Path_h.pathJoin(self.Path_h.CD_THEMELIST_DIR,theme_name)
+            widgets.append([theme,theme_name,None])
             
+            if selected_theme==theme_name:
+                index=i
+        
+        self.basic_tab_switcher.setTabsItems(widgets)
+        self.basic_tab_switcher.setCurrentRow(index)
+        self.basic_tab_switcher.show()
+
+    

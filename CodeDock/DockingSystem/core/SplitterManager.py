@@ -156,7 +156,22 @@ class SplitterManager:
         SplitterManager.removeDockFromSplitter(temp_dock)
         #SplitterManager.removeDropIndicatoreWidget(temp_dock)    
         
+    def removeDockAndParent(dock_widget:DockWidget):
+        splitter=dock_widget.parent_splitter
+        index=splitter.indexOf(dock_widget)
+        sizes=splitter.sizes()
 
+        temp_dock=DropIndicatorWidget()
+
+
+        temp_dock.setStyleSheet("background-color:#1B1E24")
+        #SplitterManager.prev_drop_indicator_widget=temp_dock
+        temp_dock.parent_splitter=splitter
+        
+        dock_widget.setParent(None)
+        splitter.insertWidget(index,temp_dock)
+        splitter.setSizes(sizes)
+        SplitterManager.removeDockFromSplitter(temp_dock)
 
     def onAnimationCreated(animation:QtCore.QVariantAnimation):
         SplitterManager.running_animation=animation

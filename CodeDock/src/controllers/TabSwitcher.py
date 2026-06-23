@@ -280,6 +280,8 @@ class Ui_Tab_Switcher(QWidget):
         self.adjustSize()
         self.resize(0,0)
 
+
+
     def getVarDict(self):
 
         return {
@@ -422,7 +424,7 @@ class Ui_Tab_Switcher(QWidget):
             col = i % self.columns
             self.grid_layout.addWidget(imgae_idget, row, col)
 
-        self.image_labeler.set_selected(True,self.image_widgets[self.index],image_label)
+        #self.image_labeler.set_selected(True,self.image_widgets[self.index],image_label)
 
 
         self.adjustSize()
@@ -442,6 +444,14 @@ class Ui_Tab_Switcher(QWidget):
             self.index = new_index
             self.image_labeler.set_selected(True,self.image_widgets[self.index],self.image_labels[self.index])
 
+    def keyReleaseEvent(self, a0):
+        if a0.key() == Qt.Key.Key_Control:
+            
+            self.whenTabSelected.emit(self.index)
+            self.hide() 
+        
+        return super().keyReleaseEvent(a0)
+
     def keyPressEvent(self, event: QKeyEvent):
 
         cols = self.columns
@@ -449,6 +459,8 @@ class Ui_Tab_Switcher(QWidget):
 
         row = self.index // cols
         col = self.index % cols
+
+
 
         if event.key() == Qt.Key.Key_Right:
             col = (col + 1) % cols
@@ -479,6 +491,8 @@ import sys
 
 class BasicTabSwitcher(QDialog):
     whenTabSelected = pyqtSignal(int)
+    whenTabSelectedText=pyqtSignal(str)
+    whenTabSelectedObj=pyqtSignal(object)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -492,9 +506,8 @@ class BasicTabSwitcher(QDialog):
 
         self.current_row_i = 0
         self.last_row_i = 0
-
+        self.set_current_change=False
     def applyStyle(self):
-        self.setStyleSheet("background-color:red;")
         self.list_widget.setStyleSheet("""
             QListWidget {
                 background-color: #2b2b2b;
@@ -527,6 +540,7 @@ class BasicTabSwitcher(QDialog):
         for i, tab in enumerate(tabs):
             item = QListWidgetItem(QIcon(tab[2]), tab[1])
             self.list_widget.addItem(item)
+            item.setData(Qt.ItemDataRole.UserRole, tab[0]) 
 
         self.list_widget.setIconSize(QSize(14, 14))
         self.applyStyle()
@@ -552,10 +566,12 @@ class BasicTabSwitcher(QDialog):
 
     def onCurrentRowChange(self, i):
         self.last_row_i = i
-
+        if self.set_current_change:
+            self.get_selected_tab()
     def setCurrentRow(self, index):
         self.last_row_i = index
         self.list_widget.setCurrentRow(index)
+
     def keyReleaseEvent(self, event):
         
         if event.key() == Qt.Key.Key_Control:
@@ -595,9 +611,16 @@ class BasicTabSwitcher(QDialog):
 
     def get_selected_tab(self):
         row = self.list_widget.currentRow()
+        item = self.list_widget.item(row)
+
+        ob = item.data(Qt.ItemDataRole.UserRole)
+        
         print("Selected tab:", row)
         self.whenTabSelected.emit(row)
-
+        if isinstance(ob,str):
+            self.whenTabSelectedText.emit(ob)
+        else:
+            self.whenTabSelectedObj.emit(ob)
 
 
 

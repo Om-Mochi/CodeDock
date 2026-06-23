@@ -18,3 +18,4 @@ venv_win/
 
 # Temp
 tmp*/
+*.spec

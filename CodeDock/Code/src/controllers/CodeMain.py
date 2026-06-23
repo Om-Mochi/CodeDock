@@ -10,7 +10,10 @@ from CodeDock.src.controllers.TabSwitcher import Tab_V_Switcher,Ui_Tab_Switcher,
 from CodeDock.src.controllers.WorkSpaceHandler import WorkSpace_Handler
 
 
+
 from CodeDock.DockingSystem.widgets.DockWidget import DockWidget
+from CodeDock.DockingSystem.core.SplitterManager import SplitterManager
+
 from CodeDock.Debuger import Debug
 #from CodeDock.Code.src.views. import 
 import hashlib
@@ -46,9 +49,12 @@ class Code_Main(Code_Settings):
 
         self.ui_tab_switcher=Ui_Tab_Switcher()
         self.basic_tab_switcher=BasicTabSwitcher()
+
         #self.which_tab_swicher=self.basic_tab_switcher
         self.ui_tab_switcher.whenTabSelected.connect(lambda i:self.activeEditorByTab(i))
-        self.basic_tab_switcher.whenTabSelected.connect(lambda i:self.activeEditorByTab(i))
+        #self.basic_tab_switcher.whenTabSelected.connect(lambda i:self.activeEditorByTab(i))
+        self.basic_tab_switcher.whenTabSelectedObj.connect(lambda obj:self.activeEditorBySwitcher(obj))
+
         #self.pylsp=PyLsp()
         self.mdi_area.setAcceptDrops(True)
             
@@ -117,6 +123,8 @@ class Code_Main(Code_Settings):
         self.tabbar_editor.tabCloseRequested.connect(self.onTabClose)
         self.dock_zone.whenKey_Ctrl_Shift_Tab_Pressed.connect(lambda:self.popUpTabSwitcher(self.ui_tab_switcher))
         self.dock_zone.whenKey_Ctrl_Tab_Pressed.connect(lambda:self.popUpTabSwitcher(self.basic_tab_switcher))
+        self.dock_zone.whenKey_Ctrl_Realeas.connect(lambda:(self.ui_tab_switcher.hide()))
+        
         self.dock_zone.whenDockClose.connect(self.closeSubWindowAndTab)
         self.dock_zone.setPathH(self.Path_h)
         #self.refrenceDisplaySubWindow()
@@ -239,7 +247,8 @@ class Code_Main(Code_Settings):
 
     def openUrlDockWidget(self,file_url,dock_widget):
         file_name:str=self.Path_h.filePathToFileName(file_url)
-        
+        Debug.yellow(file_name)
+
         if not file_url:
             self.addSubWindowEditor(dock_widget=dock_widget)
 
@@ -271,7 +280,7 @@ class Code_Main(Code_Settings):
     def openUrlSubwindow(self,file_url):
         
         file_name:str=self.Path_h.filePathToFileName(file_url)
-        
+        Debug.red(file_name)
         if not file_url:
             self.addSubWindowEditor()
 
@@ -299,7 +308,15 @@ class Code_Main(Code_Settings):
         elif self.Path_h.isSupportImgExt(file_name):
             self.subWinImageViewer(file_url)
             
-    
+    def activeEditorBySwitcher(self,widget):
+        
+        if widget!=None:
+            
+            if self.dock_zone.is_any_dock_maximized:
+                self.dock_zone.setDockToMaximize(widget)
+            self.dock_zone.setActivatDock(widget)
+            Debug.green(f"tab activated :{widget.title()}" )
+
     def activeEditorByTab(self,index):
         wiidget=self.tabbar_editor.tabData(index)
         
@@ -308,7 +325,7 @@ class Code_Main(Code_Settings):
             if self.dock_zone.is_any_dock_maximized:
                 self.dock_zone.setDockToMaximize(wiidget)
             self.dock_zone.setActivatDock(wiidget)
-
+            Debug.green(f"tab activated :{wiidget.title()}" )
 
         """
         for subwindow in self.tab_list:
@@ -340,6 +357,7 @@ class Code_Main(Code_Settings):
     
     
     def setSelectedTab(self,dock_widget:DockWidget):
+        Debug.blue(dock_widget.title())
         if dock_widget:
             tab_i=self.subwindow_service_buffer[dock_widget].tab_index
             self.tabbar_editor.setCurrentIndex(tab_i)
@@ -359,7 +377,7 @@ class Code_Main(Code_Settings):
         subwindow=self.tabbar_editor.tabData(index)
         #print(index,"index")
         self.closeSubWindowAndTab(subwindow,index)
-
+        SplitterManager.removeDockAndParent(subwindow)
 
 
     def closeSubWindowAndTab(self,subwindow,index=None):
@@ -372,11 +390,9 @@ class Code_Main(Code_Settings):
         self.tabbar_editor.removeTab(index)
         self.subwindow_service_buffer.pop(subwindow)
         #self.mdi_area.closeSubWindow(subwindow)
-        self.mdi_area.subwindow_buffer.pop(index)
+        #self.mdi_area.subwindow_buffer.pop(index)
         for t_i in range(index,self.tabbar_editor.count()):
             subwin_obj=self.tabbar_editor.tabData(t_i)
-            
-            self.mdi_area.subwindow_states[subwin_obj].index=t_i
             
             self.subwindow_service_buffer[subwin_obj].tab_index=t_i
 
@@ -507,7 +523,7 @@ class Code_Main(Code_Settings):
     def autoSaveCodeFile(self):
 
         if self.codefile_path!=None: 
-            print("file goto saved")
+
             with open(self.codefile_path,'w')as file:
                 file.write(self.running_textedit_editor.toPlainText())
                 file.close()
@@ -591,15 +607,15 @@ class Code_Main(Code_Settings):
         
         #self.sub_window_addr.append([subwindow,None])
 
-        """    
-        self.subwindow_service_buffer[subwindow]=subWindowServiceConfigs(
-            subwindow_obj=subwindow,
+           
+        self.subwindow_service_buffer[dock_widget]=subWindowServiceConfigs(
+            subwindow_obj=dock_widget,
             tab_index=t_index,
             file_path=None,
             textedit_obj=None,
             subwindow_ssmngr_obj=None
             )
-        """
+        
         #self.mdi_area.addSubWindow(subwindow)
 
     def updateIconInSubwindowAndTabbar(self):
@@ -634,14 +650,14 @@ class Code_Main(Code_Settings):
         self.tabbar_editor.setTabIcon(self.tabbar_editor.count()-1 ,QtGui.QIcon(self.Path_h.IMAGE_EXT_ICON))
         
         self.tab_list.append(dock_widget)
-        """
-        self.subwindow_service_buffer[subwindow]=subWindowServiceConfigs(
-            subwindow_obj=subwindow,
+        
+        self.subwindow_service_buffer[dock_widget]=subWindowServiceConfigs(
+            subwindow_obj=dock_widget,
             tab_index=t_index,
             file_path=None,
             textedit_obj=None,
             subwindow_ssmngr_obj=None
-            )"""
+            )
         if dock_widget:
 
             return dock_widget
@@ -669,14 +685,14 @@ class Code_Main(Code_Settings):
         
         self.tab_list.append(dock_widget)
         
-        """
-        self.subwindow_service_buffer[subwindow]=subWindowServiceConfigs(
-            # subwindow_obj=subwindow,
+        
+        self.subwindow_service_buffer[dock_widget]=subWindowServiceConfigs(
+            subwindow_obj=dock_widget,
             tab_index=t_index,
             file_path=None,
             textedit_obj=None,
             subwindow_ssmngr_obj=None
-            )"""
+            )
 
         #self.mdi_area.addSubWindow(subwindow)
     #def addDockWidgetEditor(self,title="untitled",is_source_file=False)

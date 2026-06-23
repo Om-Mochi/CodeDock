@@ -57,7 +57,7 @@ class DockWidget(QtWidgets.QWidget):
             QtWidgets.QSizePolicy.Policy.Preferred
         )
 
-
+        self.tab_index=None
         self._drag_pos=None
         self._source_widget=None
 
@@ -210,9 +210,14 @@ class DockWidget(QtWidgets.QWidget):
     def focusInEvent(self, a0):
         print("fcus in..........\n\n\n\n")
         DockWidgetStyle.setActivatedStyleSheet(self)
+        if self.text_editor:
+            self.text_editor.setFocus(QtCore.Qt.FocusReason.MouseFocusReason)
         return super().focusInEvent(a0)
     
     def focusOutEvent(self, a0):
         DockWidgetStyle.setDeActivatedStyleSheet(self)
+        if self.text_editor:
+            self.text_editor.clearFocus()
+        
         return super().focusOutEvent(a0)
     

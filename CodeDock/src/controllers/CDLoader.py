@@ -141,9 +141,14 @@ class CDLoader:
             self.label.resize(self.svg_width, self.svg_height)
 
             # SVG file path
-            self.svg_file_path = "/media/omx/24A2A33AA2A30F7C/Linux/projects/CodeBookN/CodeDock/icons/cd_icon.svg"
+            self.svg_file_path = None
+             
+           # Initialize with original SVG
             
-            # Initialize with original SVG
+        
+        def setSvgAndInit(self,path):
+            
+            self.svg_file_path = path
             self.original_pixmap = self.render_original_svg()
             self.label.setPixmap(self.original_pixmap)
 
@@ -167,7 +172,7 @@ class CDLoader:
             self.animation_state = 0  # 0: layer1, 1: layer2, 2: original
             self.animating = False
             self.thread: CDLoader.SVGRenderThread | None = None
-
+        
         def render_original_svg(self):
             """Render the original SVG without color modifications"""
             svg_renderer = QtSvg.QSvgRenderer(self.svg_file_path)

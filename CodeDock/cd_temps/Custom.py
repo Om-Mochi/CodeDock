@@ -7,7 +7,6 @@ import re
 import math
 import time
 
-
 class TimeTracker:
     def __init__(self):
         self.start_time = None
@@ -2529,9 +2528,7 @@ class Custom:
                 e_col=cursor.columnNumber()-1
                 
             print(cursor.columnNumber())
-            self.notifyOnKeyStrock.emit()
             self.whenCompletionInsert.emit(cursor.blockNumber(),s_col,cursor.blockNumber(),e_col,completion)
-            #self.whenCompletionInsert.emit(cursor.blockNumber(),s_col,cursor.blockNumber(),e_col,completion)
 
             self.setTextCursor(cursor)
             
@@ -2547,6 +2544,7 @@ class Custom:
                         completion = current_index.data()
                         self.insertCompletion(completion)
                         self.completer_model.clear()
+                        self.notifyOnKeyStrock.emit()
                           # Insert the selected completion
                     self.completer.popup().hide()  # Close the popup
                     return  # Consume the event to prevent default behavior
@@ -2769,7 +2767,6 @@ class Custom:
 
             elif t_charecter and key==QtCore.Qt.Key.Key_Backspace:
                 print(f"'{t_charecter}' - char")
-            
                 self.whenOnlyAplphaNemuricKeyPressed.emit(t_charecter)
                 
 
@@ -2785,6 +2782,8 @@ class Custom:
             cursor = self.textCursor()
             cursor.select(cursor.SelectionType.WordUnderCursor)
             word = cursor.selectedText().strip()
+
+            print("word ",word)
             
             if True:
                 self.proxy_model.setFilterFixedString(word)
@@ -2837,6 +2836,8 @@ class Custom:
             if len(completion_result)!=0:
                 self.completer_model.clear()
 
+
+            print("cccccccc seteddd d d d d d d")
             for completion in completion_result:
                 
                 #suggestions.append((item.get("label"),item.get("kind")))

@@ -1,0 +1,13 @@
+[
+  {
+    "directory": "/tmp/CPP_Project_",
+    "command": "clang++ -std=c++17 -I./src -c src/main_t.cpp",
+    "file": "/tmp/CPP_Project/src/main_t.cpp"
+  },
+  {
+    "directory": "/tmp/CPP_Project",
+    "command": "clang++ -std=c++17 -I./src -c src/test.cpp",
+    "file": "/tmp/CPP_Project/src/test.cpp"
+  }
+]
+

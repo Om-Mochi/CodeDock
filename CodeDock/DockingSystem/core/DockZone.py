@@ -21,7 +21,7 @@ class DockZone(QtWidgets.QFrame):
     whenDockClose=QtCore.pyqtSignal(DockWidget)
     whenKey_Ctrl_Shift_Tab_Pressed=QtCore.pyqtSignal()
     whenKey_Ctrl_Tab_Pressed=QtCore.pyqtSignal()
-   
+    whenKey_Ctrl_Realeas=QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
         self.whenDockClose.connect
@@ -239,20 +239,29 @@ class DockZone(QtWidgets.QFrame):
             and self.dock_placement.side!=Sides.CENTER
             ):
             self.whenPathUrlDroped.emit(url,self.cur_dock_widget)
+        
 
     def setActivatDock(self,dock_widget:DockWidget):
 
         if self.activated_dock_widget==None:
+            dock_widget.setFocus()
+            if dock_widget.text_editor:
+                dock_widget.text_editor.setFocus(QtCore.Qt.FocusReason.MouseFocusReason)
             self.activated_dock_widget=dock_widget
             DockWidgetStyle.setActivatedStyleSheet(dock_widget)
+
             return
 
         if self.activated_dock_widget!=dock_widget:
+            dock_widget.setFocus()
+
+            if dock_widget.text_editor:
+                dock_widget.text_editor.setFocus(QtCore.Qt.FocusReason.MouseFocusReason)
+
             DockWidgetStyle.setDeActivatedStyleSheet(self.activated_dock_widget)
             DockWidgetStyle.setActivatedStyleSheet(dock_widget)
             self.activated_dock_widget=dock_widget
             self.whenDockActivated.emit(dock_widget)
-
         
     def dynamicDockResize(self,key_type:QtCore.Qt.Key,dock_widget:DockWidget):
         
@@ -1156,6 +1165,14 @@ class DockZone(QtWidgets.QFrame):
         elif widget:
             self.whenWidgetDroped.emit(widget)
             event.acceptProposedAction()
+    
+
+    def keyReleaseEvent(self, event):
+        if event.key() == QtCore.Qt.Key.Key_Control:
+            self.whenKey_Ctrl_Realeas.emit()
+
+        super().keyReleaseEvent(event)             
+            
 
     def keyPressEvent(self, event):
         if event.modifiers() == QtCore.Qt.KeyboardModifier.ControlModifier and event.key() == QtCore.Qt.Key.Key_Q:

@@ -19,9 +19,9 @@ class Path_Handler:
         self.TEMP_FILE=os.path.join(BASE_DIR, "cd_temps")
         self.TAB_IMAGE_DIRPATH=os.path.join(BASE_DIR,"tab_image")
         
-        self.updateIcon()
-
-
+        self.updateIcon()   
+        self.base_dir=BASE_DIR
+    
     def updateIcon(self):
         ICONS_DIR=os.path.join(BASE_DIR,"icons")
 
@@ -38,7 +38,8 @@ class Path_Handler:
 
 
         self.CODEDOCK_ICON=os.path.join(ICONS_DIR,f"{self.LANG_THEME}/CD_ICON.png")
-        self.CODEBOOK_SPLASH=os.path.join(ICONS_DIR, "codedock_splash6.png")
+        self.CODEDOCK_SPLASH_SVG=os.path.join(ICONS_DIR, "cd_icon.svg")
+        self.CODEDOCK_SPLASH=os.path.join(ICONS_DIR, "codedock_splash6.png")
         self.CODEBOOK_ICON=os.path.join(ICONS_DIR, "codebook_icon.png")
         
         #self.TEMP_FILE=os.path.join(TEMP_FILE, "tempFilePy.py")
@@ -217,7 +218,7 @@ class Path_Handler:
         CUSTOM_COLOR_THEME=os.path.join(CONFIG,"custom_color_theme.txt")
         SELECTED_SYNTAX_THEME=os.path.join(CONFIG,"selected_themes.txt")
         SELECTED_CD_THEME=os.path.join(CONFIG,"selected_themes.txt")
-
+        DEFAULT_CD_THEME=os.path.join(BASE_DIR,"Lang","CD_Themes","CodeDock Dark")
 
     def convertPathIntoSystemFormat(self,path:str)->str:
         return str(pathlib.Path(path))

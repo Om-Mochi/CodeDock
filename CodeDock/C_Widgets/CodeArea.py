@@ -7,7 +7,6 @@ import typing
 import enum
 import math
 import abc
-
 #s-dsetee
 @dataclasses.dataclass
 class RectDT:
@@ -122,7 +121,7 @@ class RefreshProjectDesk(QtWidgets.QWidget):
         else:
             x,y=self.setProjectIcons()
             self.move(x,y)
-
+            #
 
     def setProjectIcons(self):
 
